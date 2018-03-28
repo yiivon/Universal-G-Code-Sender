@@ -263,6 +263,8 @@
 
                               <!-- Download and untar JRE -->
                               <exec dir="${project.build.directory}" executable="curl" failonerror="true">
+                                  <arg line="-C -"/><!-- Do not download if the file already exist -->
+                                  <arg line="--silent"/><!-- Do not display progress bar -->
                                   <arg line="-L"/>
                                   <arg line="-b"/>
                                   <arg line="&quot;oraclelicense=accept-securebackup-cookie&quot;"/>
@@ -402,6 +404,8 @@
 
                      <!-- Download and untar JRE -->
                      <exec dir="${project.build.directory}" executable="curl" failonerror="true">
+                       <arg line="-C -"/><!-- Do not download if the file already exist -->
+                       <arg line="--silent"/><!-- Do not display progress bar -->
                        <arg line="-L"/>
                        <arg line="-b"/>
                        <arg line="&quot;oraclelicense=accept-securebackup-cookie&quot;"/>
@@ -418,6 +422,8 @@
 
                      <!-- Download ARM JavaFX binaries -->
                      <exec dir="${project.build.directory}" executable="curl" failonerror="true">
+                       <arg line="-C -"/><!-- Do not download if the file already exist -->
+                       <arg line="--silent"/><!-- Do not display progress bar -->
                        <arg line="${ugs.rpi.bundle.javafx.url}"/>
                        <arg line="-o"/>
                        <arg line="${project.build.directory}/gluon.javafx.zip"/>

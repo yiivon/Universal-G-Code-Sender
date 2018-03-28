@@ -11,7 +11,10 @@ after_success:
   - codecov
   - mvn package -pl ugs-core assembly:assembly
   - mvn install
+  - mvn install -pl ugs-platform/application -Pcreate-dmg
 
 before_script:
   - pip install --user codecov
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq genisoimage
 

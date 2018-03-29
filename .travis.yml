@@ -18,3 +18,12 @@ before_script:
   - sudo apt-get update -qq
   - sudo apt-get install -qq genisoimage
 
+deploy:
+  -
+    on:
+      branch: release
+    provider: bintray
+    skip_cleanup: true
+    file: ugs-platform/application/target/ugs-platform-app-2.0-SNAPSHOT.dmg
+    user: breiler
+    key: $BINTRAY_API_KEY

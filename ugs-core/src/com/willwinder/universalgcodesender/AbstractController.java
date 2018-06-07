@@ -923,7 +923,9 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandSkipped(GcodeCommand command) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandSkipped(command);
+                if (c != this) {
+                    c.commandSkipped(command);
+                }
             }
         }
     }
@@ -931,7 +933,9 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandSent(GcodeCommand command) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandSent(command);
+                if (c != this) {
+                    c.commandSent(command);
+                }
             }
         }
     }

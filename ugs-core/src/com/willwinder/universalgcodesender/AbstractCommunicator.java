@@ -29,6 +29,7 @@ import com.willwinder.universalgcodesender.utils.GcodeStreamReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,6 +96,7 @@ public abstract class AbstractCommunicator {
     abstract public void softReset();
     abstract public void responseMessage(String response);
     abstract public int numActiveCommands();
+    abstract public boolean isStreaming();
 
     /**
      * Reset any internal buffers. In case a controller reset was detected call

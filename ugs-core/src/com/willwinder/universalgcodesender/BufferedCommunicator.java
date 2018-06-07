@@ -26,6 +26,7 @@ import com.willwinder.universalgcodesender.types.GcodeCommand;
 import com.willwinder.universalgcodesender.utils.CommUtils;
 import com.willwinder.universalgcodesender.utils.GcodeStreamReader;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +41,12 @@ public abstract class BufferedCommunicator extends AbstractCommunicator {
 
     // Command streaming variables
     private Boolean sendPaused = false;
+
+    public boolean isStreaming() {
+        return streaming;
+    }
+
+    private boolean streaming = false;
     private GcodeCommand nextCommand;                      // Cached command.
     private GcodeStreamReader commandStream;               // Arbitrary number of commands
     private final LinkedBlockingDeque<String> commandBuffer;     // Manually specified commands
@@ -212,6 +219,7 @@ public abstract class BufferedCommunicator extends AbstractCommunicator {
                     this.getNextCommand().getCommandString(),
                     this.getBufferSize())
                 && allowMoreCommands()) {
+            streaming = true;
 
             GcodeCommand command = this.getNextCommand();
 
@@ -239,6 +247,7 @@ public abstract class BufferedCommunicator extends AbstractCommunicator {
                 System.exit(-1);
             }
         }
+        streaming = false;
     }
     
     @Override

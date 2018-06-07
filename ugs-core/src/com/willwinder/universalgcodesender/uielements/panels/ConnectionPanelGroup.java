@@ -18,6 +18,7 @@
  */
 package com.willwinder.universalgcodesender.uielements.panels;
 
+import com.willwinder.universalgcodesender.Utils;
 import com.willwinder.universalgcodesender.connection.ConnectionFactory;
 import com.willwinder.universalgcodesender.i18n.Localization;
 import com.willwinder.universalgcodesender.listeners.ControllerListener;
@@ -50,9 +51,9 @@ public class ConnectionPanelGroup extends JPanel implements UGSEventListener, Co
     private final JLabel baudLabel = new JLabel(Localization.getString("mainWindow.swing.baudLabel"));
     private final JLabel firmwareLabel = new JLabel(Localization.getString("mainWindow.swing.firmwareLabel"));
 
-    private final JComboBox portCombo = new JComboBox();
-    private final JComboBox baudCombo = new JComboBox();
-    private final JComboBox firmwareCombo = new JComboBox();
+    private final JComboBox<String> portCombo = new JComboBox<>();
+    private final JComboBox<String> baudCombo = new JComboBox<>();
+    private final JComboBox<String> firmwareCombo = new JComboBox<>();
 
     private final JButton refreshButton = new JButton(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/refresh.gif")));
     private final JButton openCloseButton = new JButton(Localization.getString("mainWindow.swing.opencloseButton"));
@@ -96,7 +97,7 @@ public class ConnectionPanelGroup extends JPanel implements UGSEventListener, Co
 
         portCombo.setEditable(true);
 
-        baudCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400"}));
+        baudCombo.setModel(new DefaultComboBoxModel<>(Utils.BAUD_RATES));
         baudCombo.setSelectedIndex(2);
         baudCombo.setToolTipText("Select baudrate to use for the serial port.");
 

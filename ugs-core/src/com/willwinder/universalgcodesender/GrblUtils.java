@@ -25,6 +25,7 @@ import com.willwinder.universalgcodesender.listeners.ControllerStatus;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus.OverridePercents;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus.AccessoryStates;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus.EnabledPins;
+import com.willwinder.universalgcodesender.listeners.ControllerStatusBuilder;
 import com.willwinder.universalgcodesender.model.Alarm;
 import com.willwinder.universalgcodesender.model.Axis;
 import com.willwinder.universalgcodesender.model.Overrides;
@@ -337,11 +338,12 @@ public class GrblUtils {
         if (!version.hasCapability(GrblCapabilitiesConstants.V1_FORMAT)) {
             String stateString = getStateFromStatusString(status, version);
             ControllerState state = getControllerStateFromStateString(stateString);
-            return new ControllerStatus(
-                    stateString,
-                    state,
-                    getMachinePositionFromStatusString(status, version, reportingUnits),
-                    getWorkPositionFromStatusString(status, version, reportingUnits));
+            return new ControllerStatusBuilder()
+                    .setStateString(stateString)
+                    .setState(state)
+                    .setMachineCoord(getMachinePositionFromStatusString(status, version, reportingUnits))
+                    .setWorkCoord(getWorkPositionFromStatusString(status, version, reportingUnits))
+                    .build();
         } else {
             String stateString = "";
             Position MPos = null;
@@ -438,7 +440,18 @@ public class GrblUtils {
             }
 
             ControllerState state = getControllerStateFromStateString(stateString);
-            return new ControllerStatus(stateString, state, MPos, WPos, feedSpeed, spindleSpeed, overrides, WCO, pins, accessoryStates);
+            return new ControllerStatusBuilder()
+                    .setStateString(stateString)
+                    .setState(state)
+                    .setMachineCoord(MPos)
+                    .setWorkCoord(WPos)
+                    .setFeedSpeed(feedSpeed)
+                    .setSpindleSpeed(spindleSpeed)
+                    .setOverrides(overrides)
+                    .setWorkCoordinateOffset(WCO)
+                    .setPins(pins)
+                    .setStates(accessoryStates)
+                    .build();
         }
     }
 

@@ -23,6 +23,7 @@ import com.willwinder.universalgcodesender.gcode.util.GcodeUtils;
 import com.willwinder.universalgcodesender.i18n.Localization;
 import com.willwinder.universalgcodesender.listeners.ControllerState;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus;
+import com.willwinder.universalgcodesender.listeners.ControllerStatusBuilder;
 import com.willwinder.universalgcodesender.model.Alarm;
 import com.willwinder.universalgcodesender.model.Overrides;
 import com.willwinder.universalgcodesender.model.Position;
@@ -71,7 +72,12 @@ public class GrblController extends AbstractController {
     // Polling state
     private int outstandingPolls = 0;
     private Timer positionPollTimer = null;  
-    private ControllerStatus controllerStatus = new ControllerStatus("Idle", ControllerState.IDLE, new Position(0,0,0,Units.MM), new Position(0,0,0,Units.MM));
+    private ControllerStatus controllerStatus = new ControllerStatusBuilder()
+            .setStateString("Idle")
+            .setState(ControllerState.IDLE)
+            .setMachineCoord(new Position(0, 0, 0, Units.MM))
+            .setWorkCoord(new Position(0, 0, 0, Units.MM))
+            .build();
 
     // Canceling state
     private Boolean isCanceling = false;     // Set for the position polling thread.
@@ -175,17 +181,10 @@ public class GrblController extends AbstractController {
                     //this is not updating the state to Alarm in the GUI, and the alarm is no longer being processed
                     // TODO: Find a builder library.
                     String stateString = lookupCode(response, true);
-                    this.controllerStatus = new ControllerStatus(
-                            stateString,
-                            ControllerState.ALARM,
-                            this.controllerStatus.getMachineCoord(),
-                            this.controllerStatus.getWorkCoord(),
-                            this.controllerStatus.getFeedSpeed(),
-                            this.controllerStatus.getSpindleSpeed(),
-                            this.controllerStatus.getOverrides(),
-                            this.controllerStatus.getWorkCoordinateOffset(),
-                            this.controllerStatus.getEnabledPins(),
-                            this.controllerStatus.getAccessoryStates());
+                    this.controllerStatus = new ControllerStatusBuilder(this.controllerStatus)
+                            .setStateString(stateString)
+                            .setState(ControllerState.ALARM)
+                            .build();
 
                     Alarm alarm = GrblUtils.parseAlarmResponse(response);
                     dispatchAlarm(alarm);

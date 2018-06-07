@@ -169,6 +169,14 @@ public interface IController {
     */
     GcodeCommand createCommand(String gcode) throws Exception;
     void sendCommandImmediately(GcodeCommand cmd) throws Exception;
+
+    /**
+     * Queues a command before any other command in stream
+     * @param cmd
+     * @throws Exception
+     * @deprecated use {@link #queueStream(GcodeStreamReader)} instead
+     */
+    @Deprecated
     void queueCommand(GcodeCommand cmd) throws Exception;
     void queueStream(GcodeStreamReader r);
 
@@ -210,4 +218,6 @@ public interface IController {
      * @return the current state
      */
     ControllerState getState();
+
+    void messageForConsole(String msg);
 }

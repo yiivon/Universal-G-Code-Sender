@@ -24,6 +24,7 @@ import com.willwinder.universalgcodesender.gcode.TinyGGcodeCommandCreator;
 import com.willwinder.universalgcodesender.i18n.Localization;
 import com.willwinder.universalgcodesender.listeners.ControllerState;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus;
+import com.willwinder.universalgcodesender.listeners.ControllerStatusBuilder;
 import com.willwinder.universalgcodesender.model.Overrides;
 import com.willwinder.universalgcodesender.model.Position;
 import com.willwinder.universalgcodesender.firmware.DefaultFirmwareSettings;
@@ -146,7 +147,12 @@ public class TinyGController extends AbstractController {
             machineLocation.set(result.machine);
             workLocation.set(result.work);
             
-            ControllerStatus cs = new ControllerStatus(result.stateString, result.state, machineLocation, workLocation);
+            ControllerStatus cs = new ControllerStatusBuilder()
+                    .setStateString(result.stateString)
+                    .setState(result.state)
+                    .setMachineCoord(machineLocation)
+                    .setWorkCoord(workLocation)
+                    .build();
             dispatchStatusString(cs);
         }
         else if (TinyGGcodeCommand.isOkErrorResponse(response)) {

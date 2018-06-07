@@ -22,6 +22,7 @@ import com.willwinder.universalgcodesender.AbstractController;
 import com.willwinder.universalgcodesender.IController;
 import com.willwinder.universalgcodesender.listeners.ControllerState;
 import com.willwinder.universalgcodesender.listeners.ControllerStatus;
+import com.willwinder.universalgcodesender.listeners.ControllerStatusBuilder;
 import com.willwinder.universalgcodesender.listeners.UGSEventListener;
 import com.willwinder.universalgcodesender.model.UGSEvent.ControlState;
 import com.willwinder.universalgcodesender.firmware.IFirmwareSettings;
@@ -380,7 +381,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithValueExpressionShouldSetPosition() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -394,7 +400,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithExpressionShouldSetPosition() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -408,7 +419,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithExpressionShouldSetNegativePosition() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -422,7 +438,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithAdditionExpression() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -436,7 +457,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithMultiplicationExpression() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -450,7 +476,11 @@ public class GUIBackendTest {
     public void setWorkPositionWithMultiplicationExpressionWithoutValue() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle").setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -464,7 +494,11 @@ public class GUIBackendTest {
     public void setWorkPositionWithDivisionExpression() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle").setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -475,10 +509,20 @@ public class GUIBackendTest {
     }
 
     @Test
+    public void testing() {
+        System.out.println(System.currentTimeMillis());
+    }
+
+    @Test
     public void setWorkPositionWithDivisionExpressionWithoutValue() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When
@@ -492,7 +536,12 @@ public class GUIBackendTest {
     public void setWorkPositionWithSubtractionExpression() throws Exception {
         // Given
         instance.connect(FIRMWARE, PORT, BAUD_RATE);
-        ControllerStatus status = new ControllerStatus("idle", ControllerState.IDLE, new Position(0, 0, 0, UnitUtils.Units.MM), new Position(11, 11,11, UnitUtils.Units.MM));
+        ControllerStatus status = new ControllerStatusBuilder()
+                .setStateString("idle")
+                .setState(ControllerState.IDLE)
+                .setMachineCoord(new Position(0, 0, 0, UnitUtils.Units.MM))
+                .setWorkCoord(new Position(11, 11, 11, UnitUtils.Units.MM))
+                .build();
         instance.statusStringListener(status);
 
         // When

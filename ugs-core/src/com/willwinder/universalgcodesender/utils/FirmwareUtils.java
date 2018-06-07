@@ -23,7 +23,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.willwinder.universalgcodesender.AbstractController;
+import com.willwinder.universalgcodesender.IController;
 import com.willwinder.universalgcodesender.i18n.Localization;
 import java.io.BufferedReader;
 import java.io.File;
@@ -125,7 +125,7 @@ public class FirmwareUtils {
      * @param firmware
      * @return 
      */
-    public static Optional<AbstractController> getControllerFor(String firmware) {
+    public static Optional<IController> getControllerFor(String firmware) {
         if (!configFiles.containsKey(firmware)) {
             return Optional.empty();
         }

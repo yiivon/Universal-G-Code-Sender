@@ -20,6 +20,7 @@ package com.willwinder.ugs.nbp.core.actions;
 
 import com.willwinder.ugs.nbp.lib.lookup.CentralLookup;
 import com.willwinder.ugs.nbp.lib.services.LocalizingService;
+import com.willwinder.universalgcodesender.Utils;
 import com.willwinder.universalgcodesender.i18n.Localization;
 import com.willwinder.universalgcodesender.listeners.UGSEventListener;
 import com.willwinder.universalgcodesender.model.BackendAPI;
@@ -72,7 +73,7 @@ public class BaudRateAction extends CallableSystemAction implements UGSEventList
 
         // Baud rate options.
         baudCombo.setEditable(true);
-        baudCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400"}));
+        baudCombo.setModel(new javax.swing.DefaultComboBoxModel<>(Utils.BAUD_RATES));
         baudCombo.setSelectedIndex(6);
         baudCombo.setToolTipText("Select baudrate to use for the serial port.");
 

@@ -19,7 +19,6 @@
 package com.willwinder.universalgcodesender.model;
 
 import com.google.common.io.Files;
-import com.willwinder.universalgcodesender.AbstractController;
 import com.willwinder.universalgcodesender.IController;
 import com.willwinder.universalgcodesender.Utils;
 import com.willwinder.universalgcodesender.connection.ConnectionFactory;
@@ -67,7 +66,7 @@ public class GUIBackend implements BackendAPI, ControllerListener, SettingChange
     private static final Logger logger = Logger.getLogger(GUIBackend.class.getName());
     private static final String NEW_LINE = "\n    ";
 
-    private AbstractController controller = null;
+    private IController controller = null;
     private Settings settings = null;
     private Position machineCoord = null;
     private Position workCoord = null;
@@ -242,8 +241,8 @@ public class GUIBackend implements BackendAPI, ControllerListener, SettingChange
         }
     }
 
-    protected AbstractController fetchControllerFromFirmware(String firmware) throws Exception {
-        Optional<AbstractController> c = FirmwareUtils.getControllerFor(firmware);
+    protected IController fetchControllerFromFirmware(String firmware) throws Exception {
+        Optional<IController> c = FirmwareUtils.getControllerFor(firmware);
         if (!c.isPresent()) {
             throw new Exception("Unable to create handler for: " + firmware);
         }

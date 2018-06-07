@@ -34,6 +34,8 @@ import java.text.NumberFormat;
  */
 public class Utils {
 
+    public static final String[] BAUD_RATES = new String[]{"2400", "4800", "9600", "19200", "38400", "57600", "115200", "230400", "250000"};
+
     public static NumberFormat formatter = new DecimalFormat("#.###", Localization.dfs);
 
     public static String formattedMillis(long millis) {

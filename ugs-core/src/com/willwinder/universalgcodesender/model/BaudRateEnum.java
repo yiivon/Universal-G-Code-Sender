@@ -12,7 +12,9 @@ public enum BaudRateEnum {
     BAUD_RATE_38400("38400"),
     BAUD_RATE_57600("57600"),
     BAUD_RATE_115200("115200"),
-    BAUD_RATE_230400("230400");
+    BAUD_RATE_230400("230400"),
+    BAUD_RATE_250000("250000");
+    ;
 
     private final String baudRate;
 

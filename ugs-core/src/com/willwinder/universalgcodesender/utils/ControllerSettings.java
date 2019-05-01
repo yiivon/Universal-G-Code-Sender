@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.willwinder.universalgcodesender.GrblController;
 import com.willwinder.universalgcodesender.IController;
 import com.willwinder.universalgcodesender.LoopBackCommunicator;
+import com.willwinder.universalgcodesender.MarlinController;
 import com.willwinder.universalgcodesender.SmoothieController;
 import com.willwinder.universalgcodesender.TinyGController;
 import com.willwinder.universalgcodesender.XLCDCommunicator;
@@ -72,6 +73,7 @@ public class ControllerSettings {
         GRBL("GRBL"),
         SMOOTHIE("SmoothieBoard"),
         TINYG("TinyG"),
+        MARLIN("Marlin"),
         XLCD("XLCD"),
         LOOPBACK("Loopback"),
         LOOPBACK_SLOW("Loopback_Slow");
@@ -118,6 +120,8 @@ public class ControllerSettings {
                 return new SmoothieController();
             case TINYG:
                 return new TinyGController();
+            case MARLIN:
+                return new MarlinController();
             case XLCD:
                 return new GrblController(new XLCDCommunicator());
             case LOOPBACK:

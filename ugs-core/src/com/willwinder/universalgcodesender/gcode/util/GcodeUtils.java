@@ -67,8 +67,11 @@ public class GcodeUtils {
         String convertedDistance = Utils.formatter.format(distance);
         String convertedFeedRate = Utils.formatter.format(feedRate);
 
+        if (units != null) {
+            sb.append(GcodeUtils.unitCommand(units));
+        }
+
         // Set command.
-        sb.append(GcodeUtils.unitCommand(units));
         sb.append(command);
 
         if (dirX != 0) {

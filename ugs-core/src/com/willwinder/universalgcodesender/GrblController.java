@@ -611,6 +611,12 @@ public class GrblController extends AbstractController {
         return controllerStatus;
     }
 
+    @Override
+    public void commandSent(GcodeCommand command) {
+        super.commandSent(command);
+        dispatchConsoleMessage(MessageType.INFO, ">>> " + StringUtils.trimToEmpty(command.getCommandString()) + "\n");
+    }
+
     /**
      * Create a timer which will execute GRBL's position polling mechanism.
      */

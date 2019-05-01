@@ -107,42 +107,13 @@ public class MarlinController extends AbstractController {
     @Override
     protected void rawResponseHandler(String response) {
         if (response.endsWith("start")) {
-            dispatchConsoleMessage(MessageType.INFO, "[ready]\n");
-            setCurrentState(UGSEvent.ControlState.COMM_IDLE);
-            controllerState = ControllerState.IDLE;
-            ThreadHelper.invokeLater(() -> {
-                try {
-                    comm.queueStringForComm("M211");
-                    comm.queueStringForComm("M503");
-                    comm.queueStringForComm("M121");
-                    comm.queueStringForComm("M302 S1");
-                    comm.streamCommands();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                stopPollingPosition();
-                positionPollTimer = createPositionPollTimer();
-                beginPollingPosition();
-            }, 2000);
+            handleStartMessage();
         } else if (getActiveCommand().isPresent()) {
             String commandString = getActiveCommand().get().getCommandString();
             if (commandString.startsWith("M114")) {
-                //dispatchConsoleMessage(MessageType.INFO,  commandString + ": " + response + "\n");
-                if(response.contains("X:") && response.contains("Y:") && response.contains("Z:")) {
-                    try {
-                        double x = decimalFormatter.parse(StringUtils.substringBetween(response, "X:", " ")).doubleValue();
-                        double y = decimalFormatter.parse(StringUtils.substringBetween(response, "Y:", " ")).doubleValue();
-                        double z = decimalFormatter.parse(StringUtils.substringBetween(response, "Z:", " ")).doubleValue();
-                        controllerStatus = ControllerStatusBuilder.newInstance(controllerStatus)
-                                .setMachineCoord(new Position(x, y, z, UnitUtils.Units.MM))
-                                .setWorkCoord(new Position(x, y, z, UnitUtils.Units.MM))
-                                .setState(controllerState)
-                                .build();
-
-                        dispatchStatusString(controllerStatus);
-                    } catch (ParseException e) {
-                    }
+                handleStatusMessage(response);
+                if(getActiveCommand().get().getCommandNumber() >= 0) {
+                    dispatchConsoleMessage(MessageType.INFO, commandString + ": " + response + "\n");
                 }
             } else {
                 dispatchConsoleMessage(MessageType.INFO, commandString + ": " + response + "\n");
@@ -155,8 +126,6 @@ public class MarlinController extends AbstractController {
                     this.dispatchConsoleMessage(MessageType.ERROR, Localization.getString("controller.error.response")
                             + " <" + response + ">: " + e.getMessage());
                 }
-
-                this.dispatchConsoleMessage(MessageType.INFO, response + "\n");
             }
         } else if (MarlinGcodeCommand.isEchoResponse(response)) {
             dispatchConsoleMessage(MessageType.INFO, "< " + response + "\n");
@@ -170,6 +139,47 @@ public class MarlinController extends AbstractController {
 
             //listeners.forEach(l -> l.messageForConsole(ControllerListener.MessageType.INFO, command.getCommandString() + " -> " + command.getResponse() + "\n"));
         }
+    }
+
+    private void handleStatusMessage(String response) {
+        outstandingPolls = 0;
+        //dispatchConsoleMessage(MessageType.INFO,  commandString + ": " + response + "\n");
+        if(response.contains("X:") && response.contains("Y:") && response.contains("Z:")) {
+            try {
+                double x = decimalFormatter.parse(StringUtils.substringBetween(response, "X:", " ")).doubleValue();
+                double y = decimalFormatter.parse(StringUtils.substringBetween(response, "Y:", " ")).doubleValue();
+                double z = decimalFormatter.parse(StringUtils.substringBetween(response, "Z:", " ")).doubleValue();
+                controllerStatus = ControllerStatusBuilder.newInstance(controllerStatus)
+                        .setMachineCoord(new Position(x, y, z, UnitUtils.Units.MM))
+                        .setWorkCoord(new Position(x, y, z, UnitUtils.Units.MM))
+                        .setState(controllerState)
+                        .build();
+
+                dispatchStatusString(controllerStatus);
+            } catch (ParseException e) {
+            }
+        }
+    }
+
+    private void handleStartMessage() {
+        dispatchConsoleMessage(MessageType.INFO, "[ready]\n");
+        setCurrentState(UGSEvent.ControlState.COMM_IDLE);
+        controllerState = ControllerState.IDLE;
+        ThreadHelper.invokeLater(() -> {
+            try {
+                comm.queueStringForComm("M211");
+                comm.queueStringForComm("M503");
+                comm.queueStringForComm("M121");
+                comm.queueStringForComm("M302 S1");
+                comm.streamCommands();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            stopPollingPosition();
+            positionPollTimer = createPositionPollTimer();
+            beginPollingPosition();
+        }, 2000);
     }
 
     @Override
@@ -221,7 +231,7 @@ public class MarlinController extends AbstractController {
      * Create a timer which will execute GRBL's position polling mechanism.
      */
     private Timer createPositionPollTimer() {
-        // Action Listener for GRBL's polling mechanism.
+        // Action Listener for polling mechanism.
         ActionListener actionListener = actionEvent -> EventQueue.invokeLater(() -> {
             try {
                 if (outstandingPolls == 0) {
@@ -280,5 +290,24 @@ public class MarlinController extends AbstractController {
         command = createCommand(commandString);
         sendCommandImmediately(command);
         restoreParserModalState();
+    }
+
+    @Override
+    public void performHomingCycle() throws Exception {
+        sendCommandImmediately(new GcodeCommand("G28"));
+    }
+
+    @Override
+    public void returnToHome() throws Exception {
+        if (controllerStatus.getWorkCoord().getZ() < 0) {
+            sendCommandImmediately(new GcodeCommand("G90 G0 Z0"));
+        }
+        sendCommandImmediately(new GcodeCommand("G90 G0 X0 Y0"));
+        sendCommandImmediately(new GcodeCommand("G90 G0 Z0"));
+    }
+
+    @Override
+    public void pauseStreaming() throws Exception {
+        super.pauseStreaming();
     }
 }

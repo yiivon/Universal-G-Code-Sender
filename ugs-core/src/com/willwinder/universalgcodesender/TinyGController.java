@@ -434,4 +434,10 @@ public class TinyGController extends AbstractController {
                 return COMM_IDLE;
         }
     }
+
+    @Override
+    public void commandSent(GcodeCommand command) {
+        super.commandSent(command);
+        dispatchConsoleMessage(MessageType.INFO, ">>> " + StringUtils.trimToEmpty(command.getCommandString()) + "\n");
+    }
 }

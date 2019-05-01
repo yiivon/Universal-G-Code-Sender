@@ -746,7 +746,6 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
             dispatchCommandCommment(command.getComment());
         }
         dispatchCommandSent(command);
-        dispatchConsoleMessage(MessageType.INFO, ">>> " + StringUtils.trimToEmpty(command.getCommandString()) + "\n");
     }
 
     @Override

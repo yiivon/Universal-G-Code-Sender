@@ -111,7 +111,7 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     private ControlState currentState = COMM_DISCONNECTED;
 
 
-    /** API Interface. */
+    /* API Interface. */
 
     /**
      * Called to ask controller if it is idle.
@@ -886,7 +886,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchStatusString(ControllerStatus status) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.statusStringListener(status);
+                try {
+                    c.statusStringListener(status);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchStatusString event", e);
+                }
             }
         }
     }
@@ -902,7 +906,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchStateChange(ControlState state) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.controlStateChange(state);
+                try {
+                    c.controlStateChange(state);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchStateChange event", e);
+                }
             }
         }
     }
@@ -910,7 +918,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchStreamComplete(String filename, Boolean success) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.fileStreamComplete(filename, success);
+                try {
+                    c.fileStreamComplete(filename, success);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchStreamComplete event", e);
+                }
             }
         }
     }
@@ -918,7 +930,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandSkipped(GcodeCommand command) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandSkipped(command);
+                try {
+                    c.commandSkipped(command);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchCommandSkipped event", e);
+                }
             }
         }
     }
@@ -926,7 +942,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandSent(GcodeCommand command) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandSent(command);
+                try {
+                    c.commandSent(command);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchCommandSent event", e);
+                }
             }
         }
     }
@@ -934,7 +954,11 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandComplete(GcodeCommand command) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandComplete(command);
+                try {
+                    c.commandComplete(command);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the commandComplete event", e);
+                }
             }
         }
     }
@@ -942,21 +966,35 @@ public abstract class AbstractController implements SerialCommunicatorListener, 
     protected void dispatchCommandCommment(String comment) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.commandComment(comment);
+                try {
+                    c.commandComment(comment);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchCommandCommment event", e);
+                }
             }
         }
     }
 
     protected void dispatchAlarm(Alarm alarm) {
         if (listeners != null) {
-            listeners.forEach(l -> l.receivedAlarm(alarm));
+            listeners.forEach(l -> {
+                try {
+                    l.receivedAlarm(alarm);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, l.getClass().getSimpleName() + " couldn't handle the dispatchAlarm event", e);
+                }
+            });
         }
     }
 
     protected void dispatchProbeCoordinates(Position p) {
         if (listeners != null) {
             for (ControllerListener c : listeners) {
-                c.probeCoordinates(p);
+                try {
+                    c.probeCoordinates(p);
+                } catch (Exception e) {
+                    logger.log(Level.WARNING, c.getClass().getSimpleName() + " couldn't handle the dispatchProbeCoordinates event", e);
+                }
             }
         }
     }

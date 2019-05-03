@@ -22,6 +22,7 @@ import com.willwinder.ugs.nbp.core.control.JogActionService;
 import com.willwinder.ugs.nbp.core.control.MacroService;
 import com.willwinder.ugs.nbp.core.services.OverrideActionService;
 import com.willwinder.ugs.nbp.core.services.PendantService;
+import com.willwinder.ugs.nbp.core.services.SendProgressService;
 import com.willwinder.ugs.nbp.core.services.SettingsChangedNotificationService;
 import com.willwinder.ugs.nbp.core.services.WindowTitleUpdaterService;
 import com.willwinder.ugs.nbp.core.statusline.SendStatusLineService;
@@ -76,6 +77,8 @@ public class startup extends OptionProcessor implements Runnable {
         Lookup.getDefault().lookup(WindowTitleUpdaterService.class);
         logger.info("Loading PendantService...");
         Lookup.getDefault().lookup(PendantService.class);
+        logger.info("Loading SendProgressService...");
+        Lookup.getDefault().lookup(SendProgressService.class);
         logger.info("Services loaded!");
 
         logger.info("Setting UGP version title.");
